@@ -266,7 +266,7 @@ const Templates = () => {
 
                 <div className="rounded-2xl overflow-hidden shadow-2xl shadow-emerald-500/20 transition-transform hover:-translate-y-2 duration-300">
                   <img
-                    src="https://jaro-website.s3.ap-south-1.amazonaws.com/2024/08/illustration-data-analysis-graph_53876-18132.webp"
+                    src="https://www.simplilearn.com/ice9/free_resources_article_thumb/Types_of_Artificial_Intelligence.jpg"
                     alt="Get Analysis"
                     className="w-full h-full object-cover"
                   />
