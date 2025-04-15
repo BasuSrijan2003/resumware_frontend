@@ -65,8 +65,8 @@ const Hero = () => {
       ctx.clearRect(0, 0, canvas.width, canvas.height);
 
       // Update and draw connections
-      ctx.strokeStyle = "rgba(64, 149, 255, 0.15)";
-      ctx.lineWidth = 0.5;
+      ctx.strokeStyle = "rgba(245, 230, 18, 0.15)";
+      ctx.lineWidth = 0.6;
       connections.forEach((connection) => {
         const fromNode = nodes[connection.from];
         const toNode = nodes[connection.to];
@@ -548,12 +548,12 @@ const Hero = () => {
       <motion.div
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
-        transition={{ duration: 1, delay: 3.5 }}
+        transition={{ duration: 5, delay: 5 }}
         className="absolute bottom-8 left-1/2 transform -translate-x-1/2 flex flex-col items-center z-20"
       >
         <p className="text-gray-400 text-sm mb-2">Scroll to explore</p>
-        <div className="w-6 h-10 border-2 border-gray-500 rounded-full p-1">
-          <div className="w-1.5 h-1.5 bg-blue-500 rounded-full animate-bounce mx-auto"></div>
+        <div className="w-7 h-10 border-2 border-purple-500 rounded-full p-1">
+          <div className="w-1.5 h-2 bg-green-500 rounded-full animate-bounce mx-auto"></div>
         </div>
       </motion.div>
     </div>

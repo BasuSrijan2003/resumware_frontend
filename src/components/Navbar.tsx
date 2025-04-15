@@ -1,6 +1,6 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Menu, X, LogOut, Home } from "lucide-react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
@@ -16,9 +16,10 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Separator } from "@/components/ui/separator";
 import { Github, Linkedin, Facebook } from "lucide-react";
 import Dashboard from "./dashboard";
-import Templates from "./Templates";
+// import Templates from "./Templates";
 
 const Navbar = () => {
+  const navigate = useNavigate();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [showDashboard, setShowDashboard] = useState(false);
   const [showTemplates, setShowTemplates] = useState(false);
@@ -45,6 +46,25 @@ const Navbar = () => {
     { skill: "Project Management", average: 70, color: "red" },
   ];
 
+  // Check for existing login on component mount
+  useEffect(() => {
+    const storedUser = localStorage.getItem("authUser");
+    if (storedUser) {
+      const userData = JSON.parse(storedUser);
+      setIsLoggedIn(true);
+      setUserType(userData.userType);
+
+      // Set appropriate view based on user type
+      if (userData.userType === "candidate") {
+        setShowTemplates(true);
+        setShowDashboard(false);
+      } else if (userData.userType === "institute") {
+        setShowDashboard(true);
+        setShowTemplates(false);
+      }
+    }
+  }, []);
+
   // Login handler with user type consideration
   const handleLogin = (e, selectedUserType) => {
     e.preventDefault();
@@ -54,6 +74,15 @@ const Navbar = () => {
       loginPassword,
       "as",
       selectedUserType
+    );
+
+    // Store auth info in localStorage to persist login
+    localStorage.setItem(
+      "authUser",
+      JSON.stringify({
+        userType: selectedUserType,
+        timestamp: new Date().getTime(),
+      })
     );
 
     // Reset fields after submission
@@ -92,6 +121,15 @@ const Navbar = () => {
       selectedUserType
     );
 
+    // Store auth info in localStorage to persist login
+    localStorage.setItem(
+      "authUser",
+      JSON.stringify({
+        userType: selectedUserType,
+        timestamp: new Date().getTime(),
+      })
+    );
+
     // Reset fields after submission
     setSignupEmail("");
     setSignupPassword("");
@@ -117,6 +155,15 @@ const Navbar = () => {
   const handleSocialLogin = (provider, selectedUserType) => {
     console.log(`Login with ${provider} as ${selectedUserType}`);
 
+    // Store auth info in localStorage to persist login
+    localStorage.setItem(
+      "authUser",
+      JSON.stringify({
+        userType: selectedUserType,
+        timestamp: new Date().getTime(),
+      })
+    );
+
     // Set user type and login state
     setUserType(selectedUserType);
     setIsLoggedIn(true);
@@ -139,6 +186,15 @@ const Navbar = () => {
       selectedUserType
     );
 
+    // Store auth info in localStorage to persist login
+    localStorage.setItem(
+      "authUser",
+      JSON.stringify({
+        userType: selectedUserType,
+        timestamp: new Date().getTime(),
+      })
+    );
+
     // Set user type and login state
     setUserType(selectedUserType);
     setIsLoggedIn(true);
@@ -155,86 +211,67 @@ const Navbar = () => {
 
   // Logout handler
   const handleLogout = () => {
+    // Clear stored auth info
+    localStorage.removeItem("authUser");
+
     setIsLoggedIn(false);
     setShowDashboard(false);
     setShowTemplates(false);
     setUserType(null);
+    navigate("/");
   };
 
   // Always render the navbar
   const renderNavbar = () => {
     return (
-      <nav className="bg-white border-b border-gray-200 py-3 shadow-sm sticky top-0 z-50">
-        <div className="container mx-auto flex justify-between items-center px-4">
-          <div className="flex items-center space-x-8">
-            <div className="flex items-center space-x-2">
-              <span className="font-bold text-xl bg-gradient-to-r from-blue-600 to-purple-600 text-transparent bg-clip-text">
-                IIT-IIM Resume
-              </span>
-            </div>
-          </div>
+      <nav className="bg-white shadow-md p-4">
+        <div className="container mx-auto flex justify-between items-center">
+          <Link to="/" className="font-bold text-xl text-blue-600">
+            IIT-IIM Resume
+          </Link>
 
-          <div className="hidden md:flex items-center space-x-4">
-            {/* Navigation links */}
-            <Link
-              to="/"
-              className="text-gray-700 hover:text-blue-600 transition font-medium flex items-center space-x-1"
-            >
-              <Home size={16} />
-              <span>Home</span>
+          {/* Navigation links - Desktop */}
+          <div className="hidden md:flex space-x-4 items-center">
+            <Link to="/" className="px-4 py-2 hover:text-blue-600">
+              Home
             </Link>
 
             {isLoggedIn && (
               <>
-                <Link
-                  to="/profile"
-                  className="text-gray-700 hover:text-blue-600 transition font-medium"
-                >
+                <Link to="/profile" className="px-4 py-2 hover:text-blue-600">
                   Profile
                 </Link>
                 <Link
                   to="/resume-builder"
-                  className="text-gray-700 hover:text-blue-600 transition font-medium"
+                  className="px-4 py-2 hover:text-blue-600"
                 >
                   Resume Builder
                 </Link>
-                <Link
-                  to="/resume-analysis"
-                  className="text-gray-700 hover:text-blue-600 transition font-medium"
-                >
+                <Link to="/analysis" className="px-4 py-2 hover:text-blue-600">
                   Analysis
                 </Link>
-                <Link
-                  to="/jobs"
-                  className="text-gray-700 hover:text-blue-600 transition font-medium"
-                >
+                <Link to="/jobs" className="px-4 py-2 hover:text-blue-600">
                   Jobs
                 </Link>
-                <Link
-                  to="/settings"
-                  className="text-gray-700 hover:text-blue-600 transition font-medium"
-                >
+                <Link to="/settings" className="px-4 py-2 hover:text-blue-600">
                   Settings
                 </Link>
               </>
             )}
 
             {isLoggedIn ? (
-              // Logout button when logged in
               <Button
                 variant="outline"
+                className="ml-4 flex items-center gap-2"
                 onClick={handleLogout}
-                className="flex items-center space-x-1"
               >
                 <LogOut size={16} />
-                <span>Logout</span>
+                Logout
               </Button>
             ) : (
-              // Login/Signup buttons when not logged in
               <>
                 <AuthDialog
                   type="login"
-                  mobile={false}
                   onSignup={(e, selectedUserType) =>
                     handleSignup(e, selectedUserType)
                   }
@@ -246,10 +283,8 @@ const Navbar = () => {
                   }
                   onPhoneLogin={handlePhoneLogin}
                 />
-
                 <AuthDialog
                   type="signup"
-                  mobile={false}
                   onSignup={(e, selectedUserType) =>
                     handleSignup(e, selectedUserType)
                   }
@@ -261,10 +296,7 @@ const Navbar = () => {
                   }
                   onPhoneLogin={handlePhoneLogin}
                 />
-
-                <Button className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white px-6">
-                  Get Started
-                </Button>
+                <Button>Get Started</Button>
               </>
             )}
           </div>
@@ -276,107 +308,82 @@ const Navbar = () => {
           >
             {isMenuOpen ? <X size={24} /> : <Menu size={24} />}
           </button>
-
-          {/* Mobile menu */}
-          {isMenuOpen && (
-            <div className="absolute top-16 left-0 right-0 bg-white border-b border-gray-200 p-4 md:hidden z-50 shadow-md">
-              <div className="flex flex-col space-y-4">
-                {/* Home link for mobile */}
-                <Link
-                  to="/"
-                  className="py-2 text-gray-700 hover:text-blue-600 transition font-medium flex items-center space-x-1"
-                >
-                  <Home size={16} />
-                  <span>Home</span>
-                </Link>
-
-                {isLoggedIn && (
-                  <>
-                    <Link
-                      to="/profile"
-                      className="py-2 text-gray-700 hover:text-blue-600 transition font-medium"
-                    >
-                      Profile
-                    </Link>
-                    <Link
-                      to="/resume-builder"
-                      className="py-2 text-gray-700 hover:text-blue-600 transition font-medium"
-                    >
-                      Resume Builder
-                    </Link>
-                    <Link
-                      to="/resume-analysis"
-                      className="py-2 text-gray-700 hover:text-blue-600 transition font-medium"
-                    >
-                      Analysis
-                    </Link>
-                    <Link
-                      to="/jobs"
-                      className="py-2 text-gray-700 hover:text-blue-600 transition font-medium"
-                    >
-                      Jobs
-                    </Link>
-                    <Link
-                      to="/settings"
-                      className="py-2 text-gray-700 hover:text-blue-600 transition font-medium"
-                    >
-                      Settings
-                    </Link>
-                  </>
-                )}
-
-                {isLoggedIn ? (
-                  // Logout button for mobile when logged in
-                  <Button
-                    variant="outline"
-                    onClick={handleLogout}
-                    className="w-full flex justify-center items-center space-x-1"
-                  >
-                    <LogOut size={16} />
-                    <span>Logout</span>
-                  </Button>
-                ) : (
-                  // Login/Signup buttons for mobile when not logged in
-                  <>
-                    <AuthDialog
-                      type="login"
-                      mobile={true}
-                      onSignup={(e, selectedUserType) =>
-                        handleSignup(e, selectedUserType)
-                      }
-                      onSocialLogin={(provider, selectedUserType) =>
-                        handleSocialLogin(provider, selectedUserType)
-                      }
-                      onLogin={(e, selectedUserType) =>
-                        handleLogin(e, selectedUserType)
-                      }
-                      onPhoneLogin={handlePhoneLogin}
-                    />
-
-                    <AuthDialog
-                      type="signup"
-                      mobile={true}
-                      onSignup={(e, selectedUserType) =>
-                        handleSignup(e, selectedUserType)
-                      }
-                      onSocialLogin={(provider, selectedUserType) =>
-                        handleSocialLogin(provider, selectedUserType)
-                      }
-                      onLogin={(e, selectedUserType) =>
-                        handleLogin(e, selectedUserType)
-                      }
-                      onPhoneLogin={handlePhoneLogin}
-                    />
-
-                    <Button className="w-full bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700">
-                      Get Started
-                    </Button>
-                  </>
-                )}
-              </div>
-            </div>
-          )}
         </div>
+
+        {/* Mobile menu */}
+        {isMenuOpen && (
+          <div className="md:hidden bg-white py-4 px-6 space-y-4">
+            <Link to="/" className="block py-2 hover:text-blue-600">
+              Home
+            </Link>
+
+            {isLoggedIn && (
+              <>
+                <Link to="/profile" className="block py-2 hover:text-blue-600">
+                  Profile
+                </Link>
+                <Link
+                  to="/resume-builder"
+                  className="block py-2 hover:text-blue-600"
+                >
+                  Resume Builder
+                </Link>
+                <Link to="/analysis" className="block py-2 hover:text-blue-600">
+                  Analysis
+                </Link>
+                <Link to="/jobs" className="block py-2 hover:text-blue-600">
+                  Jobs
+                </Link>
+                <Link to="/settings" className="block py-2 hover:text-blue-600">
+                  Settings
+                </Link>
+              </>
+            )}
+
+            {isLoggedIn ? (
+              <Button
+                variant="outline"
+                className="w-full flex items-center justify-center gap-2"
+                onClick={handleLogout}
+              >
+                <LogOut size={16} />
+                Logout
+              </Button>
+            ) : (
+              <>
+                <AuthDialog
+                  type="login"
+                  mobile={true}
+                  onSignup={(e, selectedUserType) =>
+                    handleSignup(e, selectedUserType)
+                  }
+                  onSocialLogin={(provider, selectedUserType) =>
+                    handleSocialLogin(provider, selectedUserType)
+                  }
+                  onLogin={(e, selectedUserType) =>
+                    handleLogin(e, selectedUserType)
+                  }
+                  onPhoneLogin={handlePhoneLogin}
+                />
+                <AuthDialog
+                  type="signup"
+                  mobile={true}
+                  onSignup={(e, selectedUserType) =>
+                    handleSignup(e, selectedUserType)
+                  }
+                  onSocialLogin={(provider, selectedUserType) =>
+                    handleSocialLogin(provider, selectedUserType)
+                  }
+                  onLogin={(e, selectedUserType) =>
+                    handleLogin(e, selectedUserType)
+                  }
+                  onPhoneLogin={handlePhoneLogin}
+                />
+                <Button className="w-full">Get Started</Button>
+              </>
+            )}
+          </div>
+        )}
       </nav>
     );
   };
@@ -386,18 +393,14 @@ const Navbar = () => {
     <>
       {renderNavbar()}
       {showDashboard && userType === "institute" && (
-        <Dashboard
-          setShowDashboard={setShowDashboard}
-          studentSkillsData={studentSkillsData}
-        />
+        <Dashboard setShowDashboard={undefined} studentSkillsData={undefined} />
       )}
-      {showTemplates && userType === "candidate" && (
-        <Templates setShowTemplates={setShowTemplates} />
-      )}
+      {/* {showTemplates && userType === "candidate" && <Templates />} */}
     </>
   );
 };
 
+// AuthDialog component
 const AuthDialog = ({
   type,
   mobile = false,
@@ -424,19 +427,16 @@ const AuthDialog = ({
   return (
     <Dialog onOpenChange={(open) => !open && resetUserType()}>
       <DialogTrigger asChild>
-        {type === "login" ? (
-          <Button variant="outline" className={mobile ? "w-full" : ""}>
-            Login
-          </Button>
-        ) : (
-          <Button variant="outline" className={mobile ? "w-full" : ""}>
-            Sign Up
-          </Button>
-        )}
+        <Button
+          variant={type === "login" ? "outline" : "default"}
+          className={mobile ? "w-full" : ""}
+        >
+          {type === "login" ? "Login" : "Sign Up"}
+        </Button>
       </DialogTrigger>
       <DialogContent className="sm:max-w-md">
         <DialogHeader>
-          <DialogTitle className="text-center text-xl font-bold">
+          <DialogTitle>
             {!userType
               ? type === "login"
                 ? "Login as"
@@ -449,79 +449,45 @@ const AuthDialog = ({
 
         {/* Step 1: Show user type selection first */}
         {!userType ? (
-          <div className="space-y-6 py-4">
-            <div className="grid grid-cols-2 gap-4">
-              <Button
-                variant="outline"
-                className="p-4 h-auto flex flex-col items-center gap-3 hover:border-blue-500"
-                onClick={() => setUserType("candidate")}
-              >
-                <User className="h-8 w-8" />
-                <span className="font-medium">Candidate</span>
-              </Button>
-
-              <Button
-                variant="outline"
-                className="p-4 h-auto flex flex-col items-center gap-3 hover:border-blue-500"
-                onClick={() => setUserType("institute")}
-              >
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  width="24"
-                  height="24"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  strokeWidth="2"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  className="h-8 w-8"
-                >
-                  <path d="M2 22v-4l4-2-4-2V9l7 3 7-3v5l-4 2 4 2v4L12 19l-10 3Z" />
-                  <path d="M5 4.5V2l7 3 7-3v2.5" />
-                </svg>
-                <span className="font-medium">Institute</span>
-              </Button>
-            </div>
+          <div className="grid grid-cols-2 gap-4 py-4">
+            <Button
+              variant="outline"
+              className="w-full p-4 h-auto flex flex-col items-center gap-2"
+              onClick={() => setUserType("candidate")}
+            >
+              <User className="h-12 w-12" />
+              Candidate
+            </Button>
+            <Button
+              variant="outline"
+              className="w-full p-4 h-auto flex flex-col items-center gap-2"
+              onClick={() => setUserType("institute")}
+            >
+              <User className="h-12 w-12" />
+              Institute
+            </Button>
           </div>
         ) : (
           // Step 2: After selecting user type, show appropriate forms
           <>
             {/* Back button to change user type */}
-            <button
-              onClick={resetUserType}
-              className="text-sm text-blue-600 hover:underline flex items-center mb-4"
+            <Button
+              variant="ghost"
+              size="sm"
+              className="absolute left-4 top-4"
+              onClick={() => setUserType(null)}
             >
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                width="16"
-                height="16"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="2"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                className="mr-1"
-              >
-                <path d="m15 18-6-6 6-6" />
-              </svg>
               Change user type
-            </button>
+            </Button>
 
             {/* Login Form */}
             {type === "login" ? (
-              <Tabs
-                defaultValue="email"
-                className="w-full"
-                value={activeTab}
-                onValueChange={setActiveTab}
-              >
+              <Tabs defaultValue="email" onValueChange={setActiveTab}>
                 <TabsList className="grid w-full grid-cols-2">
                   <TabsTrigger value="email">Email</TabsTrigger>
                   <TabsTrigger value="phone">Phone</TabsTrigger>
                 </TabsList>
-                <TabsContent value="email" className="mt-4">
+                <TabsContent value="email">
                   <form
                     onSubmit={(e) => onLogin(e, userType)}
                     className="space-y-4"
@@ -539,7 +505,7 @@ const AuthDialog = ({
                       />
                     </div>
                     <div className="space-y-2">
-                      <div className="flex justify-between items-center">
+                      <div className="flex justify-between">
                         <Label htmlFor="password">Password</Label>
                         <a
                           href="#"
@@ -558,16 +524,13 @@ const AuthDialog = ({
                         className="w-full"
                       />
                     </div>
-                    <Button
-                      type="submit"
-                      className="w-full bg-blue-600 hover:bg-blue-700"
-                    >
+                    <Button type="submit" className="w-full">
                       Login as{" "}
                       {userType.charAt(0).toUpperCase() + userType.slice(1)}
                     </Button>
                   </form>
                 </TabsContent>
-                <TabsContent value="phone" className="mt-4">
+                <TabsContent value="phone">
                   <form
                     onSubmit={(e) => {
                       e.preventDefault();
@@ -587,10 +550,7 @@ const AuthDialog = ({
                         className="w-full"
                       />
                     </div>
-                    <Button
-                      type="submit"
-                      className="w-full bg-blue-600 hover:bg-blue-700"
-                    >
+                    <Button type="submit" className="w-full">
                       Send OTP
                     </Button>
                   </form>
@@ -616,7 +576,6 @@ const AuthDialog = ({
                     />
                   </div>
                 )}
-
                 {userType === "institute" && (
                   <div className="space-y-2">
                     <Label htmlFor="instituteName">Institute Name</Label>
@@ -631,11 +590,10 @@ const AuthDialog = ({
                     />
                   </div>
                 )}
-
                 <div className="space-y-2">
-                  <Label htmlFor="signup-email">Email</Label>
+                  <Label htmlFor="email">Email</Label>
                   <Input
-                    id="signup-email"
+                    id="email"
                     type="email"
                     value={signupEmail}
                     onChange={(e) => setSignupEmail(e.target.value)}
@@ -645,13 +603,13 @@ const AuthDialog = ({
                   />
                 </div>
                 <div className="space-y-2">
-                  <Label htmlFor="signup-phone">
+                  <Label htmlFor="phone">
                     {userType === "candidate"
                       ? "Phone Number (optional)"
                       : "Contact Phone Number"}
                   </Label>
                   <Input
-                    id="signup-phone"
+                    id="phone"
                     type="tel"
                     value={phoneNumber}
                     onChange={(e) => setPhoneNumber(e.target.value)}
@@ -661,9 +619,9 @@ const AuthDialog = ({
                   />
                 </div>
                 <div className="space-y-2">
-                  <Label htmlFor="signup-password">Password</Label>
+                  <Label htmlFor="password">Password</Label>
                   <Input
-                    id="signup-password"
+                    id="password"
                     type="password"
                     value={signupPassword}
                     onChange={(e) => setSignupPassword(e.target.value)}
@@ -673,9 +631,9 @@ const AuthDialog = ({
                   />
                 </div>
                 <div className="space-y-2">
-                  <Label htmlFor="confirm-password">Confirm Password</Label>
+                  <Label htmlFor="confirmPassword">Confirm Password</Label>
                   <Input
-                    id="confirm-password"
+                    id="confirmPassword"
                     type="password"
                     value={signupConfirmPassword}
                     onChange={(e) => setSignupConfirmPassword(e.target.value)}
@@ -684,10 +642,7 @@ const AuthDialog = ({
                     className="w-full"
                   />
                 </div>
-                <Button
-                  type="submit"
-                  className="w-full bg-blue-600 hover:bg-blue-700"
-                >
+                <Button type="submit" className="w-full">
                   Create {userType.charAt(0).toUpperCase() + userType.slice(1)}{" "}
                   Account
                 </Button>
@@ -699,9 +654,9 @@ const AuthDialog = ({
         {/* Only show social login options after user type selection */}
         {userType && (
           <>
-            <div className="relative my-2">
+            <div className="relative my-4">
               <div className="absolute inset-0 flex items-center">
-                <Separator className="w-full" />
+                <Separator />
               </div>
               <div className="relative flex justify-center">
                 <span className="bg-white px-2 text-sm text-gray-500">
@@ -709,64 +664,48 @@ const AuthDialog = ({
                 </span>
               </div>
             </div>
-
             <div className="grid grid-cols-4 gap-2">
               <Button
-                type="button"
                 variant="outline"
                 onClick={() => onSocialLogin("Google", userType)}
                 className="flex items-center justify-center"
               >
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  width="18"
-                  height="18"
-                  viewBox="0 0 24 24"
-                  className="text-red-500"
-                >
-                  <path
-                    fill="currentColor"
-                    d="M12.545 12.151c0 1.054-.855 1.909-1.909 1.909H9.909v1.909h.727c.5 0 .909.409.909.909v1.909h-.727c-.5 0-.909-.409-.909-.909v-.727H6v.727c0 .5-.409.909-.909.909H3.273v-1.909c0-.5.409-.909.909-.909h.727v-1.909h-.727c-1.054 0-1.909-.855-1.909-1.909V9.454c0-1.054.855-1.909 1.909-1.909h.727V5.636h-.727c-.5 0-.909-.409-.909-.909V2.818h1.818c.5 0 .909.409.909.909v.727h3.818v-.727c0-.5.409-.909.909-.909h1.818v1.909c0 .5-.409.909-.909.909h-.727v1.909h.727c1.054 0 1.909.855 1.909 1.909v2.697z"
-                  />
-                </svg>
+                Google
               </Button>
               <Button
-                type="button"
                 variant="outline"
                 onClick={() => onSocialLogin("Github", userType)}
                 className="flex items-center justify-center"
               >
-                <Github className="h-5 w-5" />
+                <Github className="h-4 w-4" />
               </Button>
               <Button
-                type="button"
                 variant="outline"
                 onClick={() => onSocialLogin("LinkedIn", userType)}
                 className="flex items-center justify-center"
               >
-                <Linkedin className="h-5 w-5 text-blue-500" />
+                <Linkedin className="h-4 w-4" />
               </Button>
               <Button
-                type="button"
                 variant="outline"
                 onClick={() => onSocialLogin("Facebook", userType)}
                 className="flex items-center justify-center"
               >
-                <Facebook className="h-5 w-5 text-blue-600" />
+                <Facebook className="h-4 w-4" />
               </Button>
             </div>
           </>
         )}
 
-        <DialogFooter className="sm:justify-center mt-2">
-          <p className="text-sm text-center text-gray-500">
+        <DialogFooter className="mt-4 flex flex-col sm:flex-row sm:justify-center sm:space-x-2">
+          <span className="text-center text-sm text-gray-500">
             {type === "login"
               ? "Don't have an account? "
               : "Already have an account? "}
             <a href="#" className="text-blue-600 hover:underline">
               {type === "login" ? "Sign up" : "Log in"}
             </a>
-          </p>
+          </span>
         </DialogFooter>
       </DialogContent>
     </Dialog>
@@ -778,8 +717,6 @@ const User = ({ className }) => {
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"
-      width="24"
-      height="24"
       viewBox="0 0 24 24"
       fill="none"
       stroke="currentColor"
@@ -788,8 +725,8 @@ const User = ({ className }) => {
       strokeLinejoin="round"
       className={className}
     >
-      <path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"></path>
-      <circle cx="12" cy="7" r="4"></circle>
+      <path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2" />
+      <circle cx="12" cy="7" r="4" />
     </svg>
   );
 };
