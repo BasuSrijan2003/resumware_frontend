@@ -18,9 +18,8 @@ const Footer = () => {
           {/* Company Info */}
           <div>
             <h3 className="text-xl font-bold mb-4">
-              <span className="text-white">IIT</span>
-              <span className="text-red-300">IIM</span>
-              <span className="text-gray-300">Resume</span>
+              <span className="text-gray-300">Resum</span>
+              <span className="text-red-300">ware</span>
             </h3>
             <p className="text-gray-300 mb-4">
               Professional resume templates designed specifically for IIT and
@@ -49,7 +48,7 @@ const Footer = () => {
               {[
                 { name: "Templates", url: "#templates" },
                 { name: "Pricing", url: "#pricing" },
-                { name: "Testimonials", url: "#testimonials" },
+                // { name: "Testimonials", url: "#testimonials" },
                 { name: "Blog", url: "#" },
                 { name: "About Us", url: "#" },
               ].map((link) => (
@@ -103,7 +102,7 @@ const Footer = () => {
               <li className="flex items-start">
                 <MapPin className="h-5 w-5 mr-3 text-gray-400 flex-shrink-0 mt-0.5" />
                 <span className="text-gray-300">
-                  Barasat, Dunlop,
+                  Barasat
                   <br />
                   Kolkata, India
                 </span>
@@ -113,7 +112,7 @@ const Footer = () => {
         </div>
 
         <div className="pt-8 border-t border-gray-700 text-center text-gray-400 text-sm">
-          <p>&copy; {currentYear} IIT IIM Resume. All rights reserved.</p>
+          <p>&copy; {currentYear} Resumware. All rights reserved.</p>
           <div className="mt-2 space-x-4">
             <a href="#" className="hover:text-white transition">
               Privacy Policy

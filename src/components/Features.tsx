@@ -48,8 +48,12 @@ const Features = () => {
 
   return (
     <section className="relative py-20 overflow-hidden">
-      {/* Background Elements */}
-      <div className="absolute top-0 left-0 w-full h-full bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 opacity-95 z-0"></div>
+      {/* Background Elements - Theme-aware */}
+      <div className="absolute top-0 left-0 w-full h-full bg-gradient-to-b from-gray-50 via-blue-50 to-indigo-50 dark:from-slate-900 dark:via-slate-800 dark:to-slate-900 z-0"></div>
+
+      {/* Gradient fade at bottom for seamless transition */}
+      <div className="absolute bottom-0 left-0 w-full h-40 bg-gradient-to-b from-transparent to-indigo-50 dark:to-slate-900 z-0"></div>
+
       <div className="absolute -top-40 -right-40 w-80 h-80 bg-gradient-to-r from-blue-500/20 to-purple-500/20 rounded-full blur-3xl"></div>
       <div className="absolute -bottom-40 -left-40 w-80 h-80 bg-gradient-to-r from-emerald-500/20 to-teal-500/20 rounded-full blur-3xl"></div>
 
@@ -64,10 +68,10 @@ const Features = () => {
           transition={{ duration: 0.5 }}
           className="text-center mb-16"
         >
-          <h2 className="text-3xl md:text-4xl font-bold mb-6 bg-clip-text text-transparent bg-gradient-to-r from-white to-blue-100">
+          <h2 className="text-3xl md:text-4xl font-bold mb-6 bg-clip-text text-transparent bg-gradient-to-r from-gray-900 to-blue-600 dark:from-white dark:to-blue-100">
             Elevate Your Career Prospects
           </h2>
-          <p className="text-blue-100/90 text-lg max-w-2xl mx-auto">
+          <p className="text-gray-700 dark:text-blue-100/90 text-lg max-w-2xl mx-auto">
             Our platform is specifically designed to help you create resumes
             that meet the high standards expected by top institutions and
             employers.
@@ -83,7 +87,7 @@ const Features = () => {
               transition={{ duration: 0.5, delay: feature.delay }}
               className="group"
             >
-              <div className="h-full bg-white/5 backdrop-blur-lg border border-white/10 rounded-2xl p-6 transition-all duration-300 hover:translate-y-[-8px] hover:shadow-lg hover:shadow-blue-500/10">
+              <div className="h-full bg-white dark:bg-white/5 backdrop-blur-lg border border-gray-200 dark:border-white/10 rounded-2xl p-6 transition-all duration-300 hover:translate-y-[-8px] hover:shadow-lg hover:shadow-blue-500/10">
                 <div
                   className={`${feature.iconBg} w-16 h-16 rounded-xl flex items-center justify-center mb-6 text-white bg-opacity-20`}
                 >
@@ -93,10 +97,12 @@ const Features = () => {
                     {feature.icon}
                   </div>
                 </div>
-                <h3 className="text-xl font-bold mb-3 text-white">
+                <h3 className="text-xl font-bold mb-3 text-gray-900 dark:text-white">
                   {feature.title}
                 </h3>
-                <p className="text-blue-100/70">{feature.description}</p>
+                <p className="text-gray-600 dark:text-blue-100/70">
+                  {feature.description}
+                </p>
               </div>
             </motion.div>
           ))}
@@ -108,17 +114,11 @@ const Features = () => {
           transition={{ duration: 0.5, delay: 0.5 }}
           className="mt-16 text-center"
         >
-          <p className="text-lg text-blue-100/80 italic max-w-3xl mx-auto">
+          <p className="text-lg text-gray-700 dark:text-blue-100/80 italic max-w-3xl mx-auto">
             In the competitive world of IIT and IIM placements, your resume is
             your first impression. Make it count with our specialized templates
             and guidance.
           </p>
-          <div className="mt-8">
-            <button className="relative overflow-hidden px-8 py-3 rounded-full bg-gradient-to-r from-blue-600 to-indigo-600 text-white font-semibold group">
-              <span className="absolute top-0 left-0 w-full h-full bg-gradient-to-r from-blue-700 to-indigo-700 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></span>
-              <span className="relative">Get Started Today</span>
-            </button>
-          </div>
         </motion.div>
       </div>
     </section>

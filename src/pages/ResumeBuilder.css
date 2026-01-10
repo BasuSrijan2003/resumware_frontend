@@ -1,152 +1,3 @@
-/* .resume-builder-container {
-    max-width: 1200px;
-    margin: 0 auto;
-    padding: 20px;
-  }
-  
-  .template-selection, .file-upload-section, .results-section {
-    margin-bottom: 30px;
-    padding: 20px;
-    border-radius: 8px;
-    background-color: #f9f9f9;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  }
-  
-  .templates-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
-    gap: 15px;
-    margin-top: 15px;
-  }
-  
-  .template-card {
-    border: 2px solid #e0e0e0;
-    border-radius: 8px;
-    padding: 10px;
-    cursor: pointer;
-    transition: all 0.2s ease;
-  }
-  
-  .template-card:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
-  }
-  
-  .template-card.selected {
-    border-color: #3498db;
-    background-color: rgba(52, 152, 219, 0.1);
-  }
-  
-  .template-preview {
-    height: 150px;
-    background-color: #e0e0e0;
-    margin-bottom: 10px;
-    border-radius: 4px;
-  }
-  
-  .dropzone {
-    border: 2px dashed #ccc;
-    border-radius: 4px;
-    padding: 40px;
-    text-align: center;
-    margin: 20px 0;
-    transition: all 0.2s ease;
-  }
-  
-  .dropzone:hover {
-    border-color: #3498db;
-    background-color: rgba(52, 152, 219, 0.05);
-  }
-  
-  .file-input {
-    display: none;
-  }
-  
-  .file-label {
-    cursor: pointer;
-    display: block;
-  }
-  
-  .upload-prompt {
-    display: block;
-    font-size: 16px;
-    margin-bottom: 10px;
-  }
-  
-  .file-name {
-    color: #27ae60;
-    font-weight: bold;
-  }
-  
-  .upload-info {
-    font-size: 14px;
-    color: #7f8c8d;
-    margin-bottom: 20px;
-  }
-  
-  .submit-button, .reset-button, .view-button, .download-button {
-    background-color: #3498db;
-    color: white;
-    border: none;
-    padding: 12px 20px;
-    border-radius: 4px;
-    cursor: pointer;
-    font-size: 16px;
-    margin-right: 10px;
-    transition: background-color 0.2s ease;
-  }
-  
-  .submit-button:hover, .reset-button:hover, .view-button:hover, .download-button:hover {
-    background-color: #2980b9;
-  }
-  
-  .submit-button:disabled {
-    background-color: #2dd1eb;
-    cursor: not-allowed;
-  }
-  
-  .error-message {
-    color: #e74c3c;
-    margin: 10px 0;
-  }
-  
-  .pdf-viewer-controls {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 10px;
-    margin: 20px 0;
-  }
-  
-  .results-header, .results-footer {
-    margin: 20px 0;
-    text-align: center;
-  }
-  
-  .actions-container {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 15px;
-  }
-  
-  .latex-download-link {
-    color: #3498db;
-    text-decoration: none;
-    font-weight: bold;
-    transition: color 0.2s ease;
-  }
-  
-  .latex-download-link:hover {
-    color: #2980b9;
-    text-decoration: underline;
-  }
-  
-
-
-
-
-
-
 
 
 
@@ -447,8 +298,9 @@
 
 /* Buttons */
 .submit-button, .reset-button, .view-button, .download-button {
-  background: linear-gradient(90deg, var(--primary) 0%, var(--accent) 100%);
-  color: white;
+  background: linear-gradient(90deg, rgba(244, 255, 33, 0.825) 0%, rgba(0,0,0,0.5) 100%);
+  background-color: #60e30ef8;
+  color: rgb(9, 8, 8);
   border: none;
   padding: 14px 28px;
   border-radius: 50px;
@@ -460,12 +312,12 @@
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  box-shadow: 0 6px 15px rgba(74, 107, 255, 0.25);
+  box-shadow: 0 6px 15px rgba(236, 242, 50, 0.888);
 }
 
 .submit-button:hover, .reset-button:hover, .view-button:hover, .download-button:hover {
   transform: translateY(-3px);
-  box-shadow: 0 10px 20px rgba(74, 107, 255, 0.35);
+  box-shadow: 0 10px 20px rgba(29, 221, 18, 0.568);
 }
 
 .submit-button:active, .reset-button:active {
@@ -486,7 +338,7 @@
 }
 
 .reset-button:hover {
-  box-shadow: 0 10px 20px rgba(255, 107, 107, 0.35);
+  box-shadow: 0 10px 20px rgba(180, 9, 9, 0.737);
 }
 
 .loading-state {
