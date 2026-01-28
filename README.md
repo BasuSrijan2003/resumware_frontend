@@ -7,7 +7,7 @@ A modern resume crafting application built with React, TypeScript, and Vite.
 ## Tech Stack
 
 - **Frontend**: React 18, TypeScript
-- **Build Tool**: Vite
+- **Build Tool**: Vite..
 - **UI Components**: shadcn-ui, Radix UI
 - **Styling**: Tailwind CSS, Framer Motion
 - **Forms**: React Hook Form, Zod
