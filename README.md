@@ -4,6 +4,7 @@
 
 A modern resume crafting application built with React, TypeScript, and Vite.
 
+
 ## Tech Stack
 
 - **Frontend**: React 18, TypeScript
