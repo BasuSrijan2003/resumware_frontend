@@ -21,6 +21,7 @@ A modern resume crafting application built with React, TypeScript, and Vite.
 - Node.js (v16 or higher)
 - npm or yarn
 
+
 ### Installation
 
 ```sh
