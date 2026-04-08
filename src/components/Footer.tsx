@@ -55,7 +55,7 @@ const Footer = () => {
                 <li key={link.name}>
                   <a
                     href={link.url}
-                    className="text-gray-300 hover:text-white transition"
+                    className="text-gray-300 hover:text-white transitions"
                   >
                     {link.name}
                   </a>
