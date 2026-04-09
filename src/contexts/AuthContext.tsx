@@ -26,23 +26,38 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    // Auto-logout on page refresh - don't restore session
+    // Restore session from localStorage on mount
+    const storedToken = localStorage.getItem("token");
+    const storedUser = localStorage.getItem("user");
+
+    if (storedToken && storedUser) {
+      try {
+        setToken(storedToken);
+        setUser(JSON.parse(storedUser));
+      } catch {
+        localStorage.removeItem("token");
+        localStorage.removeItem("user");
+      }
+    }
+
     setLoading(false);
   }, []);
 
   const login = (userData: User, authToken: string) => {
     setUser(userData);
     setToken(authToken);
-    // Don't save to localStorage - session will not persist on refresh
+    // Save to localStorage so documentService interceptor can read the token
+    localStorage.setItem("token", authToken);
+    localStorage.setItem("user", JSON.stringify(userData));
   };
 
   const logout = () => {
     setUser(null);
     setToken(null);
-    // Clear any stored tokens (if they exist)
     localStorage.removeItem("token");
     localStorage.removeItem("user");
     localStorage.removeItem("authUser");
+    localStorage.removeItem("authSession");
   };
 
   return (

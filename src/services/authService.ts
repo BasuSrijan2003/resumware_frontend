@@ -16,10 +16,10 @@ export interface AuthResponse {
   error?: string;
 }
 
+// Matches what the backend actually returns from /api/auth/check-email
 export interface CheckEmailResponse {
-  success: boolean;
   exists: boolean;
-  action: 'signin' | 'signup';
+  message?: string;
   error?: string;
 }
 
@@ -30,6 +30,11 @@ export const checkEmail = async (email: string): Promise<CheckEmailResponse> => 
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({ email }),
   });
+
+  if (!response.ok) {
+    throw new Error(`Server error: ${response.status}`);
+  }
+
   return response.json();
 };
 
